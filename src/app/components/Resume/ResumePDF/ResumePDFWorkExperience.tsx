@@ -24,7 +24,7 @@ export const ResumePDFWorkExperience = ({
           idx > 0 && company === workExperiences[idx - 1].company;
 
         return (
-          <View key={idx} style={idx !== 0 ? { marginTop: spacing["2"] } : {}}>
+          <View key={idx}>
             <View
               style={{
                 ...styles.flexRowBetween,
@@ -34,11 +34,15 @@ export const ResumePDFWorkExperience = ({
               }}
             >
               {!hideCompanyName && (
-                <ResumePDFText bold={true}>{company}</ResumePDFText>
+                <ResumePDFText bold={true} style={{ fontSize: "110%" }}>
+                  {company}
+                </ResumePDFText>
               )}
 
-              <ResumePDFText>{jobTitle}</ResumePDFText>
-              <ResumePDFText>{date}</ResumePDFText>
+              <ResumePDFText style={{ fontSize: "110%" }}>
+                {jobTitle}
+              </ResumePDFText>
+              <ResumePDFText style={{ fontSize: "110%" }}>{date}</ResumePDFText>
             </View>
             <View style={{ ...styles.flexCol, marginTop: spacing["1.5"] }}>
               <ResumePDFBulletList items={descriptions} />

@@ -18,8 +18,8 @@ export const ResumePDFSection = ({
   <View
     style={{
       ...styles.flexCol,
-      gap: spacing["2"],
-      marginTop: spacing["5"],
+      gap: spacing["1"],
+      marginTop: spacing["3"],
       ...style,
     }}
   >
@@ -40,6 +40,7 @@ export const ResumePDFSection = ({
           style={{
             fontWeight: "bold",
             letterSpacing: "0.3pt", // tracking-wide -> 0.025em * 12 pt = 0.3pt
+            fontSize: "120%",
           }}
           debug={DEBUG_RESUME_PDF_FLAG}
         >
