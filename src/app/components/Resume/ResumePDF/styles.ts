@@ -40,6 +40,16 @@ export const spacing = {
   full: "100%",
 } as const;
 
+export type PaddingOptionKey = keyof typeof spacing;
+
+export const DEFAULT_PADDING_KEY: PaddingOptionKey = 20;
+
+export const resolveSpacing = (value: string, defaultKey: PaddingOptionKey = DEFAULT_PADDING_KEY): string => {
+  const num = Number(value);
+  const valid = spacing.hasOwnProperty(num);
+  return spacing[valid ? num as PaddingOptionKey : defaultKey];
+};
+
 export const styles = StyleSheet.create({
   flexRow: {
     display: "flex",

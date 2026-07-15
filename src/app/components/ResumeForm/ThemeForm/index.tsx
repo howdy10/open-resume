@@ -6,6 +6,7 @@ import {
   DocumentSizeSelections,
   FontFamilySelectionsCSR,
   FontSizeSelections,
+  PaddingSelections,
 } from "components/ResumeForm/ThemeForm/Selection";
 import {
   changeSettings,
@@ -19,7 +20,7 @@ import { Cog6ToothIcon } from "@heroicons/react/24/outline";
 
 export const ThemeForm = () => {
   const settings = useAppSelector(selectSettings);
-  const { fontSize, fontFamily, documentSize } = settings;
+  const { fontSize, fontFamily, documentSize, paddingHorizontal } = settings;
   const themeColor = settings.themeColor || DEFAULT_THEME_COLOR;
   const dispatch = useAppDispatch();
 
@@ -91,6 +92,14 @@ export const ThemeForm = () => {
           <DocumentSizeSelections
             themeColor={themeColor}
             selectedDocumentSize={documentSize}
+            handleSettingsChange={handleSettingsChange}
+          />
+        </div>
+        <div>
+          <InputGroupWrapper label="Page Padding" />
+          <PaddingSelections
+            themeColor={themeColor}
+            selectedPadding={paddingHorizontal}
             handleSettingsChange={handleSettingsChange}
           />
         </div>

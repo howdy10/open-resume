@@ -7,6 +7,7 @@ import {
 } from "components/fonts/constants";
 import { getAllFontFamiliesToLoad } from "components/fonts/lib";
 import dynamic from "next/dynamic";
+import { resolveSpacing } from "components/Resume/ResumePDF/styles";
 
 const Selection = ({
   selectedColor,
@@ -126,6 +127,42 @@ export const FontSizeSelections = ({
           </Selection>
         );
       })}
+    </SelectionsWrapper>
+  );
+};
+
+export const PaddingSelections = ({
+  selectedPadding,
+  themeColor,
+  handleSettingsChange,
+}: {
+  themeColor: string;
+  selectedPadding: string;
+  handleSettingsChange: (field: GeneralSetting, value: string) => void;
+}) => {
+  return (
+    <SelectionsWrapper>
+      {(
+        [
+          { label: "Narrow", value: "14" },
+          { label: "Normal", value: "20" },
+          { label: "Wide", value: "28" },
+        ] as const
+      ).map(({ label, value }) => (
+        <Selection
+          key={value}
+          selectedColor={themeColor}
+          isSelected={value === selectedPadding}
+               onClick={() => handleSettingsChange("paddingHorizontal", value)}
+        >
+            <div className="flex flex-col items-center">
+              <div>{label}</div>
+              <div className="text-xs">
+                {resolveSpacing(value)}
+              </div>
+            </div>
+        </Selection>
+      ))}
     </SelectionsWrapper>
   );
 };

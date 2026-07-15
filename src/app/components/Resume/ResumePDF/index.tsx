@@ -1,6 +1,6 @@
 import type { JSX } from "react";
 import { Page, View, Document } from "@react-pdf/renderer";
-import { styles, spacing } from "components/Resume/ResumePDF/styles";
+import { styles, spacing, resolveSpacing } from "components/Resume/ResumePDF/styles";
 import { ResumePDFProfile } from "components/Resume/ResumePDF/ResumePDFProfile";
 import { ResumePDFWorkExperience } from "components/Resume/ResumePDF/ResumePDFWorkExperience";
 import { ResumePDFEducation } from "components/Resume/ResumePDF/ResumePDFEducation";
@@ -43,6 +43,7 @@ export const ResumePDF = ({
     fontFamily,
     fontSize,
     documentSize,
+    paddingHorizontal,
     formToHeading,
     formToShow,
     formsOrder,
@@ -117,7 +118,7 @@ export const ResumePDF = ({
           <View
             style={{
               ...styles.flexCol,
-              padding: `${spacing[0]} ${spacing[20]}`,
+              padding: `${spacing[0]} ${resolveSpacing(paddingHorizontal, 20)}`,
             }}
           >
             <ResumePDFProfile
