@@ -45,10 +45,12 @@ export const ResumePDFProfile = ({
 
           let iconType = key as IconType;
           if (key === "url") {
-            if (value.includes("github")) {
+            if (value.includes("github.com")) {
               iconType = "url_github";
-            } else if (value.includes("linkedin")) {
+            } else if (value.includes("linkedin.com")) {
               iconType = "url_linkedin";
+            } else {
+              iconType = "url";
             }
           }
 
