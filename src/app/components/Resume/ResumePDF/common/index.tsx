@@ -15,6 +15,7 @@ export const ResumePDFSection = ({
   style?: Style;
   children: React.ReactNode;
 }) => (
+  // TODO: make this gap and marginTop configurable via settings. This is margin for each section, and gap for each element inside the section.
   <View
     style={{
       ...styles.flexCol,

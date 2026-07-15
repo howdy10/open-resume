@@ -24,6 +24,7 @@ export const ResumePDFWorkExperience = ({
           idx > 0 && company === workExperiences[idx - 1].company;
 
         return (
+          // TODO: make this marginTop configurable via settings. This is the margin for each job individually.
           <View key={idx} style={idx !== 0 ? { marginTop: spacing["2"] } : {}}>
             <View
               style={{
