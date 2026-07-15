@@ -1,4 +1,5 @@
 "use client";
+import type { JSX } from "react";
 import { useEffect } from "react";
 import { useSetDefaultScale } from "components/Resume/hooks";
 import {
@@ -30,7 +31,7 @@ const ResumeControlBar = ({
 
   // Hook to update pdf when document changes
   useEffect(() => {
-    update();
+    update(document);
   }, [update, document]);
 
   return (
