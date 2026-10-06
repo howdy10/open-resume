@@ -70,7 +70,9 @@ export const extractWorkExperience = (sections: ResumeSectionToLines) => {
 
     const subsectionDescriptionsLines =
       subsectionLines.slice(descriptionsLineIdx);
-    const descriptions = getBulletPointsFromLines(subsectionDescriptionsLines);
+    const descriptions = getBulletPointsFromLines(
+      subsectionDescriptionsLines
+    ).map((content) => ({ content, isIncluded: true }));
 
     workExperiences.push({ company, jobTitle, date, descriptions });
     workExperiencesScores.push({

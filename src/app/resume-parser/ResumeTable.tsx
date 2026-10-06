@@ -92,7 +92,7 @@ export const ResumeTable = ({ resume }: { resume: Resume }) => {
             <TableRow label="Date" value={workExperience.date} />
             <TableRow
               label="Descriptions"
-              value={workExperience.descriptions}
+              value={workExperience.descriptions.map(({ content }) => content)}
               className={
                 workExperiences.length - 1 !== 0 &&
                 idx !== workExperiences.length - 1 &&

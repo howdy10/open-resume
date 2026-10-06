@@ -7,11 +7,16 @@ export interface ResumeProfile {
   location: string;
 }
 
+export interface ResumeDescriptionItem {
+  content: string;
+  isIncluded: boolean;
+}
+
 export interface ResumeWorkExperience {
   company: string;
   jobTitle: string;
   date: string;
-  descriptions: string[];
+  descriptions: ResumeDescriptionItem[];
 }
 
 export interface ResumeEducation {

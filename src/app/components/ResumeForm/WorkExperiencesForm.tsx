@@ -9,7 +9,10 @@ import {
   changeWorkExperiences,
   selectWorkExperiences,
 } from "lib/redux/resumeSlice";
-import type { ResumeWorkExperience } from "lib/redux/types";
+import type {
+  ResumeDescriptionItem,
+  ResumeWorkExperience,
+} from "lib/redux/types";
 
 export const WorkExperiencesForm = () => {
   const workExperiences = useAppSelector(selectWorkExperiences);
@@ -30,6 +33,24 @@ export const WorkExperiencesForm = () => {
           // https://github.com/microsoft/TypeScript/issues/54027
           // any is used here as a workaround
           dispatch(changeWorkExperiences({ idx, field, value } as any));
+        };
+        // TODO(Task 3): replace this adapter with per-bullet rows (hide/reorder).
+        // BulletListTextarea still operates on string[]; we map descriptions'
+        // content through it and preserve each bullet's isIncluded by index.
+        const handleDescriptionsChange = (bulletContents: string[]) => {
+          const newDescriptions: ResumeDescriptionItem[] = bulletContents.map(
+            (content, i) => ({
+              content,
+              isIncluded: descriptions[i]?.isIncluded ?? true,
+            })
+          );
+          dispatch(
+            changeWorkExperiences({
+              idx,
+              field: "descriptions",
+              value: newDescriptions,
+            } as any)
+          );
         };
         const showMoveUp = idx !== 0;
         const showMoveDown = idx !== workExperiences.length - 1;
@@ -73,8 +94,8 @@ export const WorkExperiencesForm = () => {
               labelClassName="col-span-full"
               name="descriptions"
               placeholder="Bullet points"
-              value={descriptions}
-              onChange={handleWorkExperienceChange}
+              value={descriptions.map(({ content }) => content)}
+              onChange={(_name, value) => handleDescriptionsChange(value)}
             />
           </FormSection>
         );

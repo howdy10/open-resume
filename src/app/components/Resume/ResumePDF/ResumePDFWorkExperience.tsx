@@ -40,7 +40,10 @@ export const ResumePDFWorkExperience = ({
               <ResumePDFText>{date}</ResumePDFText>
             </View>
             <View style={{ ...styles.flexCol, marginTop: spacing["1.5"] }}>
-              <ResumePDFBulletList items={descriptions} />
+              {/* TODO(Task 4): filter out !isIncluded bullets before mapping. */}
+              <ResumePDFBulletList
+                items={descriptions.map(({ content }) => content)}
+              />
             </View>
           </View>
         );

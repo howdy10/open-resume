@@ -64,14 +64,16 @@ export const initialResumeState: Resume = {
 };
 
 // Keep the field & value type in sync with CreateHandleChangeArgsWithDescriptions (components\ResumeForm\types.ts)
-export type CreateChangeActionWithDescriptions<T> = {
+export type CreateChangeActionWithDescriptions<
+  T extends { descriptions: unknown[] }
+> = {
   idx: number;
 } & (
   | {
       field: Exclude<keyof T, "descriptions">;
       value: string;
     }
-  | { field: "descriptions"; value: string[] }
+  | { field: "descriptions"; value: T["descriptions"] }
 );
 
 export const resumeSlice = createSlice({

@@ -16,6 +16,7 @@ import {
   type Settings,
 } from "lib/redux/settingsSlice";
 import { deepMerge } from "lib/deep-merge";
+import { migrateLegacyResume } from "lib/redux/migrate-resume";
 import type { Resume } from "lib/redux/types";
 
 export const useAppDispatch: () => AppDispatch = useDispatch;
@@ -42,9 +43,10 @@ export const useSetInitialStore = () => {
       // We merge the initial state with the stored state to ensure
       // backward compatibility, since new fields might be added to
       // the initial state over time.
+      const migratedResume = migrateLegacyResume(state.resume);
       const mergedResumeState = deepMerge(
         initialResumeState,
-        state.resume
+        migratedResume
       ) as Resume;
       dispatch(setResume(mergedResumeState));
     }
