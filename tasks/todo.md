@@ -85,30 +85,33 @@ Task 2's own remaining work is just its manual verification (PDF upload smoke te
 
 ## Phase 2: Per-Bullet Hide & Reorder UI
 
-### Task 3: Per-bullet row component — hide/show, move up/down, delete, add
+### Task 3: Per-bullet row component — hide/show, move up/down, delete, add ✅
 
 **Description:** Replace the freeform `BulletListTextarea` editor for Work Experience descriptions with a list of discrete bullet rows. Each row gets its own single-line `Textarea`, a hide/show toggle (reuse `ShowIconButton`), move up/down buttons (reuse `MoveIconButton size="small"`, hidden at the first/last row same as `FormSection`), and a delete button (reuse `DeleteIconButton`). Add a small "Add bullet" action below the list. All actions compute the next `ResumeDescriptionItem[]` and dispatch the existing `changeWorkExperiences({ idx, field: "descriptions", value })` action — no new reducer logic needed. A hidden bullet stays visible and editable in the form (dimmed, mirroring the `opacity-60` treatment `Form`'s whole-section hide already uses) — it's just excluded from the PDF (Task 4).
 
 **Acceptance criteria:**
-- [ ] Each bullet in a Work Experience entry renders as its own row with hide/show, move up (hidden on first row), move down (hidden on last row), and delete controls
-- [ ] Clicking hide/show toggles that bullet's `isIncluded` without affecting others
-- [ ] Clicking move up/down swaps that bullet with its neighbor, preserving each bullet's content and hidden state
-- [ ] Clicking delete removes just that bullet; an "Add bullet" control appends a new, visible, empty bullet
-- [ ] A hidden bullet is visually distinguished (dimmed) but remains editable
-- [ ] Existing whole-job-entry controls (move/delete job, add job) are unaffected
+- [x] Each bullet in a Work Experience entry renders as its own row with hide/show, move up (hidden on first row), move down (hidden on last row), and delete controls
+- [x] Clicking hide/show toggles that bullet's `isIncluded` without affecting others
+- [x] Clicking move up/down swaps that bullet with its neighbor, preserving each bullet's content and hidden state
+- [x] Clicking delete removes just that bullet; an "Add bullet" control appends a new, visible, empty bullet
+- [x] A hidden bullet is visually distinguished (dimmed via `opacity-50`) but remains editable
+- [x] Existing whole-job-entry controls (move/delete job, add job) are unaffected (untouched code path)
 
 **Verification:**
-- [ ] `npm run build` succeeds
-- [ ] Manual in browser: add a job with 3 bullets; hide the 2nd, move the 3rd above the 1st, delete the (now) 2nd, add a new one — confirm each step reflects correctly and nothing else in the form shifts unexpectedly
+- [x] `npm run build` succeeds
+- [x] `npm run test:ci` passes — added `workExperienceDescriptionActions.test.ts` (8 cases: content/included edits, move up/down incl. no-op at boundaries, delete, add), RED confirmed by running before the module existed
+- [~] Manual in browser: add a job with 3 bullets, hide/move/delete/add — not done this pass (no browser-automation tool available); the array-transformation logic each control dispatches is unit-tested directly, and `npm run build`'s static generation of `/resume-builder` (which renders this form against real sample data) didn't crash
 
 **Dependencies:** Task 1
 
-**Files likely touched:**
-- `src/app/components/ResumeForm/WorkExperiencesForm.tsx`
-- New: `src/app/components/ResumeForm/WorkExperienceDescriptionBulletRow.tsx` (or similar)
-- `src/app/components/ResumeForm/Form/IconButton.tsx` (only if `ShowIconButton` needs a `size` prop added for the compact row — check before editing)
+**Files touched:**
+- `src/app/components/ResumeForm/WorkExperiencesForm.tsx` (replaced the Task 1 adapter)
+- `src/app/components/ResumeForm/WorkExperienceDescriptionBulletRow.tsx` (new)
+- `src/app/components/ResumeForm/workExperienceDescriptionActions.ts` (new — pure array-transform helpers, unit-tested)
+- `src/app/components/ResumeForm/workExperienceDescriptionActions.test.ts` (new)
+- `src/app/components/ResumeForm/Form/IconButton.tsx` (`ShowIconButton` got an optional `size` prop and overridable tooltip text, default behavior unchanged for its one existing caller)
 
-**Estimated scope:** Medium (3 files)
+**Estimated scope:** Medium (3 files) — actual: 5 files (2 extra: the new pure-logic module + its test, split out for testability)
 
 ---
 

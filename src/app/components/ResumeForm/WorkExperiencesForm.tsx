@@ -1,9 +1,15 @@
 import { Form, FormSection } from "components/ResumeForm/Form";
-import {
-  Input,
-  BulletListTextarea,
-} from "components/ResumeForm/Form/InputGroup";
+import { Input, InputGroupWrapper } from "components/ResumeForm/Form/InputGroup";
 import type { CreateHandleChangeArgsWithDescriptions } from "components/ResumeForm/types";
+import { WorkExperienceDescriptionBulletRow } from "components/ResumeForm/WorkExperienceDescriptionBulletRow";
+import {
+  addDescription,
+  deleteDescription,
+  moveDescription,
+  setDescriptionContent,
+  setDescriptionIncluded,
+} from "components/ResumeForm/workExperienceDescriptionActions";
+import { PlusSmallIcon } from "@heroicons/react/24/outline";
 import { useAppDispatch, useAppSelector } from "lib/redux/hooks";
 import {
   changeWorkExperiences,
@@ -34,16 +40,9 @@ export const WorkExperiencesForm = () => {
           // any is used here as a workaround
           dispatch(changeWorkExperiences({ idx, field, value } as any));
         };
-        // TODO(Task 3): replace this adapter with per-bullet rows (hide/reorder).
-        // BulletListTextarea still operates on string[]; we map descriptions'
-        // content through it and preserve each bullet's isIncluded by index.
-        const handleDescriptionsChange = (bulletContents: string[]) => {
-          const newDescriptions: ResumeDescriptionItem[] = bulletContents.map(
-            (content, i) => ({
-              content,
-              isIncluded: descriptions[i]?.isIncluded ?? true,
-            })
-          );
+        const handleDescriptionsChange = (
+          newDescriptions: ResumeDescriptionItem[]
+        ) => {
           dispatch(
             changeWorkExperiences({
               idx,
@@ -89,14 +88,59 @@ export const WorkExperiencesForm = () => {
               value={date}
               onChange={handleWorkExperienceChange}
             />
-            <BulletListTextarea
-              label="Description"
-              labelClassName="col-span-full"
-              name="descriptions"
-              placeholder="Bullet points"
-              value={descriptions.map(({ content }) => content)}
-              onChange={(_name, value) => handleDescriptionsChange(value)}
-            />
+            <InputGroupWrapper label="Description" className="col-span-full">
+              <div className="mt-1 flex flex-col gap-2">
+                {descriptions.map((description, descriptionIdx) => (
+                  <WorkExperienceDescriptionBulletRow
+                    key={descriptionIdx}
+                    description={description}
+                    showMoveUp={descriptionIdx !== 0}
+                    showMoveDown={descriptionIdx !== descriptions.length - 1}
+                    onContentChange={(content) =>
+                      handleDescriptionsChange(
+                        setDescriptionContent(
+                          descriptions,
+                          descriptionIdx,
+                          content
+                        )
+                      )
+                    }
+                    onIncludedChange={(isIncluded) =>
+                      handleDescriptionsChange(
+                        setDescriptionIncluded(
+                          descriptions,
+                          descriptionIdx,
+                          isIncluded
+                        )
+                      )
+                    }
+                    onMove={(direction) =>
+                      handleDescriptionsChange(
+                        moveDescription(descriptions, descriptionIdx, direction)
+                      )
+                    }
+                    onDelete={() =>
+                      handleDescriptionsChange(
+                        deleteDescription(descriptions, descriptionIdx)
+                      )
+                    }
+                  />
+                ))}
+                <button
+                  type="button"
+                  onClick={() =>
+                    handleDescriptionsChange(addDescription(descriptions))
+                  }
+                  className="flex w-fit items-center rounded-md bg-white py-1 pl-2 pr-3 text-sm font-medium text-gray-700 shadow-sm ring-1 ring-inset ring-gray-300 hover:bg-gray-50"
+                >
+                  <PlusSmallIcon
+                    className="-ml-0.5 mr-1 h-4 w-4 text-gray-400"
+                    aria-hidden="true"
+                  />
+                  Add bullet point
+                </button>
+              </div>
+            </InputGroupWrapper>
           </FormSection>
         );
       })}
