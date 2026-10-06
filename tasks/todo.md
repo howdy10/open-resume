@@ -115,31 +115,35 @@ Task 2's own remaining work is just its manual verification (PDF upload smoke te
 
 ---
 
-### Task 4: PDF/preview excludes hidden bullets
+### Task 4: PDF/preview excludes hidden bullets ✅
 
 **Description:** `ResumePDFWorkExperience.tsx` currently passes `descriptions` straight into `ResumePDFBulletList items={descriptions}`. Filter to `isIncluded` bullets and map to their `content` before passing in, so hidden bullets never appear in the live preview or exported PDF. `ResumePDFBulletList` itself stays `string[]`-typed and unchanged.
 
 **Acceptance criteria:**
-- [ ] A bullet hidden via Task 3's toggle does not appear in the live PDF preview
-- [ ] A bullet hidden via Task 3's toggle does not appear in the downloaded PDF
-- [ ] All other bullets, and bullets in Education/Project/Skills/Custom, render exactly as before
+- [x] A bullet hidden via Task 3's toggle does not appear in the live PDF preview — `getIncludedDescriptionContents` filters by `isIncluded` before `ResumePDFBulletList` ever sees the array
+- [x] A bullet hidden via Task 3's toggle does not appear in the downloaded PDF — same render path (live preview and download both go through `ResumePDFWorkExperience`)
+- [x] All other bullets, and bullets in Education/Project/Skills/Custom, render exactly as before — untouched code paths
 
 **Verification:**
-- [ ] `npm run build` succeeds
-- [ ] Manual: hide a bullet, confirm it disappears from the live preview pane; download the PDF and confirm it's absent there too; confirm an un-hidden bullet in the same job still shows
+- [x] `npm run build` succeeds (incl. static generation of `/resume-builder`, which renders this component against real sample data)
+- [x] `npm run test:ci` passes — added `getIncludedDescriptionContents.test.ts` (3 cases: mixed, all-hidden, empty), RED confirmed before the module existed
+- [~] Manual: hide a bullet in a running browser, confirm it's absent from live preview and downloaded PDF — not done this pass (no browser-automation tool available); the exact filter the render path depends on is unit-tested directly
 
 **Dependencies:** Task 3
 
-**Files likely touched:**
+**Files touched:**
 - `src/app/components/Resume/ResumePDF/ResumePDFWorkExperience.tsx`
+- `src/app/components/Resume/ResumePDF/getIncludedDescriptionContents.ts` (new — pure filter, kept out of the `@react-pdf/renderer`-importing file so it unit-tests cleanly under jsdom)
+- `src/app/components/Resume/ResumePDF/getIncludedDescriptionContents.test.ts` (new)
 
-**Estimated scope:** Small (1 file)
+**Estimated scope:** Small (1 file) — actual: 3 files (2 extra: the extracted pure helper + its test)
 
 ---
 
 ## Checkpoint: Feature Complete
-- [ ] `npm run build` succeeds
-- [ ] `npm run lint` passes
-- [ ] `npm run test:ci` passes
-- [ ] Full manual flow: add a job, add 3 bullets, hide one, reorder two, delete one, add one back — editor and live PDF preview both reflect every action correctly; reload the page and confirm everything persisted
-- [ ] Ready for human review
+- [x] `npm run build` succeeds
+- [x] `npm run lint` passes
+- [x] `npm run test:ci` passes (22 tests across 7 suites)
+- [ ] Full manual flow: add a job, add 3 bullets, hide one, reorder two, delete one, add one back — editor and live PDF preview both reflect every action correctly; reload the page and confirm everything persisted — **not done**, no browser-automation tool was available in any session this feature was built in; every underlying transformation (migration, parsing, per-bullet move/delete/toggle/add, PDF filtering) is covered by unit tests instead
+- [ ] Ready for human review — pending the manual flow above, or your own click-through
+

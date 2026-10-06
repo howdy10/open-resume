@@ -4,6 +4,7 @@ import {
   ResumePDFBulletList,
   ResumePDFText,
 } from "components/Resume/ResumePDF/common";
+import { getIncludedDescriptionContents } from "components/Resume/ResumePDF/getIncludedDescriptionContents";
 import { styles, spacing } from "components/Resume/ResumePDF/styles";
 import type { ResumeWorkExperience } from "lib/redux/types";
 
@@ -40,9 +41,8 @@ export const ResumePDFWorkExperience = ({
               <ResumePDFText>{date}</ResumePDFText>
             </View>
             <View style={{ ...styles.flexCol, marginTop: spacing["1.5"] }}>
-              {/* TODO(Task 4): filter out !isIncluded bullets before mapping. */}
               <ResumePDFBulletList
-                items={descriptions.map(({ content }) => content)}
+                items={getIncludedDescriptionContents(descriptions)}
               />
             </View>
           </View>
