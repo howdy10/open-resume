@@ -47,27 +47,31 @@ Task 2's own remaining work is just its manual verification (PDF upload smoke te
 
 ---
 
-### Task 2: Update the other producers of work-experience descriptions
+### Task 2: Update the other producers of work-experience descriptions ✅
 
 **Description:** The PDF-import parser and the home page's hardcoded sample resume both construct `ResumeWorkExperience` objects directly and need to emit the new `ResumeDescriptionItem[]` shape instead of `string[]`.
 
+**Note:** the actual code changes to both files landed during Task 1 (forced by the type change, to keep `npm run build` green). This task added the test that proves `extract-work-experience.ts`'s behavior and completed its own verification.
+
 **Acceptance criteria:**
-- [ ] `extract-work-experience.ts` wraps each parsed bullet as `{ content, isIncluded: true }`
-- [ ] `src/app/home/constants.ts`'s work experience sample entries use the new shape
-- [ ] Importing a PDF resume on `/resume-parser` or `/resume-import` still extracts and displays work experience bullets correctly
+- [x] `extract-work-experience.ts` wraps each parsed bullet as `{ content, isIncluded: true }` — covered by new `extract-work-experience.test.ts`
+- [x] `src/app/home/constants.ts`'s work experience sample entries use the new shape — enforced by `npm run build` typecheck (static literal, no dedicated runtime test added)
+- [~] Importing a PDF resume on `/resume-parser` or `/resume-import` still extracts and displays work experience bullets correctly — not verified in an actual browser (no browser-automation tool available this session); the parsing logic itself is unit-tested end-to-end through `extractWorkExperience`
 
 **Verification:**
-- [ ] `npm run build` succeeds
-- [ ] `npm run test:ci` passes
-- [ ] Manual: upload a sample PDF resume with a work experience section, confirm bullets extract correctly and land in the form with no crash
+- [x] `npm run build` succeeds
+- [x] `npm run test:ci` passes
+- [x] Added `extract-work-experience.test.ts`: constructed a minimal synthetic `ResumeSectionToLines` fixture, confirmed RED by temporarily reverting the `.map(...)` wrap (test failed on plain strings), then GREEN after restoring it
+- [ ] Manual: upload a sample PDF resume (`public/resume-example/*.pdf`) in a running browser — not done this pass, flagged for follow-up or a future browser-testing-equipped session
 
 **Dependencies:** Task 1
 
-**Files likely touched:**
-- `src/app/lib/parse-resume-from-pdf/extract-resume-from-sections/extract-work-experience.ts`
-- `src/app/home/constants.ts`
+**Files touched:**
+- `src/app/lib/parse-resume-from-pdf/extract-resume-from-sections/extract-work-experience.ts` (already wrapped in Task 1's commit)
+- `src/app/home/constants.ts` (already wrapped in Task 1's commit)
+- `src/app/lib/parse-resume-from-pdf/extract-resume-from-sections/extract-work-experience.test.ts` (new)
 
-**Estimated scope:** Small (2 files)
+**Estimated scope:** Small (2 files) — actual: 1 new test file (the 2 source files were already done)
 
 ---
 
